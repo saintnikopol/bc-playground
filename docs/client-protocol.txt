@@ -1,0 +1,10 @@
+Command list:
+
+    BALANCE - see current balance.
+    TRANSFER - compose transaction
+    HISTORY - fetch history for wallets
+
+    ACTIVE_TRANSACTION
+
+    CREATE WALLET
+    CREATE ADDRESS
