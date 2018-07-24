@@ -6,11 +6,14 @@ let bc = require('./blockchain');
 
 let thisNodeTransactions = [];
 
+let blockchain = bc.boot();
 
 let app = new Koa();
 app.use(bodyParser());
 
 let Transactions = {};
+let mineAddress = "q3nf394hjg-random-miner-address-34nf3i4nflkn3oi"
+
 Transactions.isValid = function ({from, to, amount} = {}) {
     return from && to && amount;
 };
@@ -46,6 +49,12 @@ app.use(route.post('/txion', (ctx, next) => {
     // ctx.body = responseJSON;
 }));
 
+app.use(route.post('/txion', (ctx, next) => {
+    let lastBlock = blockchain[blockchain.length - 1];
+    let blockDescription = bc.mine(thisNodeTransactions, blockchain, mineAddress);
+    ctx.body = blockDescription;
+
+}));
 /*
 // Debug only
 app.use(async ctx => {
