@@ -43,8 +43,18 @@ function generateNextBlock({index, hash}) {
     return new Block(thisIndex, thisTimestamp, thisData, thisHash);
 }
 
+/*
+// Transaction:
+{
+    "from": "71238uqirbfh894-random-public-key-a-alkjdflakjfewn204ij",
+    "to": "93j4ivnqiopvh43-random-public-key-b-qjrgvnoeirbnferinfo",
+    "amount": 3
+}
 
-function main() {
+*/
+
+
+function boot() {
     // # Create the blockchain and add the genesis block
 
     let blockchain = [generateGenesisBlock()];
@@ -64,4 +74,8 @@ function main() {
     }
 }
 
-main();
+// main();
+
+
+let bc = {Block, generateGenesisBlock, generateNextBlock, boot};
+module.exports = bc;

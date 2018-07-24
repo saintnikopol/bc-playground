@@ -8,3 +8,18 @@ Command list:
 
     CREATE WALLET
     CREATE ADDRESS
+
+
+Curl examples
+
+#Post with json on "/" endpoint
+curl -d '{"test":"tdata"}' -H "Content-Type: application/json" -X POST http://localhost:8080
+
+
+#Post with json on "/txion" endpoint:
+curl -d '["book", "ice", "super","value4"]' -H "Content-Type: application/json" -X POST http://localhost:8080/txion
+
+
+#Simple transaction:
+ curl -d '{  "from": "71238uqirbfh894-random-public-key-a-alkjdflakjfewn204ij",  "to": "93j4ivnqiopvh43-random-public-key-b-qjrgvnoeirbnferinfo",  "amount": 3}'  -H "Content-Type: application/json" -X POST http://localhost:8080/txion
+
