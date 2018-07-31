@@ -19,6 +19,8 @@ let mineAddress = "q3nf394hjg-random-miner-address-34nf3i4nflkn3oi";
 // # so that we can communicate
 // # with them
 
+
+//Excluding this node address!
 let peerNodes = [
     'peer1.local',
     'peer2.local',
@@ -78,14 +80,16 @@ app.use(route.post('/mine', (ctx, next) => {
 
 
 app.use(route.get('/blocks', (ctx, next) => {
-    // # Get the last proof of work
-    // let lastBlock = blockchain[blockchain.length - 1];
-    let chainToSend = blockchain;
 
-    // # we can send blocks as json objects later
-    let jsonResponse = JSON.stringify(chainToSend);
-    // # Send our chain to whomever requested it
-    ctx.body = jsonResponse;
+    bc.consensus(blockchain, peerNodes).then(consesusBlockchain => {
+
+        let chainToSend = consesusBlockchain;
+
+        // # we can send blocks as json objects later
+        let jsonResponse = JSON.stringify(chainToSend);
+        // # Send our chain to whomever requested it
+        ctx.body = jsonResponse;
+    })
 
 }));
 

@@ -76,6 +76,13 @@ function peerOptionsProvider(peer = 'localhost') {
         }
     };
 }
+
+/**
+ * Fetch chains from other peer nodes
+ *
+ * @param Array peerNodes
+ * @returns {Promise<any[]>}
+ */
 function findNewChains(peerNodes) {
     // # Get the blockchains of every
     // # other node
@@ -84,6 +91,13 @@ function findNewChains(peerNodes) {
     ));
 }
 
+/**
+ * Fetch chains from other peer and return consesus chain
+ *
+ * @param blockchain
+ * @param peerNodes
+ * @returns {PromiseLike<T> | Promise<T> | *}
+ */
 function consensus(blockchain, peerNodes) {
     // # Get the blocks from other nodes
     return findNewChains(peerNodes).then(otherChains => {
