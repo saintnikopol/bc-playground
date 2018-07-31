@@ -62,6 +62,7 @@ exports.getJSONCallback = function(options, onResult)
     req.end();
 };
 
+const EMPTY_RESPONSE = [];
 exports.getJSONPromise = function(options)
 {
     return new Promise(function (fullfiled, rejected) {
@@ -79,14 +80,18 @@ exports.getJSONPromise = function(options)
             });
 
             res.on('end', function() {
-                var obj = JSON.parse(outputArray.join(''));
-                fullfiled(obj);
+                if (res.statusCode == 200) {
+                    var obj = JSON.parse(outputArray.join(''));
+                    fullfiled(obj);
+                } else {
+                    fullfiled(EMPTY_RESPONSE);
+                }
             });
         });
 
         req.on('error', function(err) {
         console.log(`call to peer ${options.host} failed`, err);
-            fullfiled([]);
+            fullfiled(EMPTY_RESPONSE);
         });
 
         req.end();

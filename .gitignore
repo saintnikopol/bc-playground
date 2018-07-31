@@ -3,5 +3,7 @@ node_modules/
 .tmp/
 server/node_modules/
 client/node_modules/
+wallet/node_modules/
 server/build/
 client/build/
+wallet/build/
