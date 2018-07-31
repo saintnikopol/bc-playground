@@ -1,0 +1,12 @@
+The Bitcoin client has a number of sources that it uses to locate the network on initial startup. In order of importance:
+
+1) The primary mechanism, if the client has ever run on this machine before and its database is intact, is to look at its database. It tracks every node it has seen on the network, how long ago it last saw it, and its IP address.
+
+2) The client can use DNS to locate a list of nodes connected to the network. One such seed is bitseed.xf2.org. The client will resolve this and get a list of Bitcoin nodes.
+
+3) The client has a list of semi-permanent nodes compiled into it.
+
+4) The client can connect to a well-known IRC network, irc.lfnet.org, and find other nodes that way. (This method has been removed as of version 0.8.2)
+
+5) It takes IP addresses from the commandline (-addnode).
+

@@ -1,4 +1,5 @@
 let hash = require("hash.js");
+let bcrest = require("./bcrest");
 
 let sha256 = hash.sha256();
 
@@ -62,6 +63,50 @@ function proofOfWork (lastProof) {
     return incrementor;
 
 }
+
+
+function peerOptionsProvider(peer = 'localhost') {
+    return {
+        host: peer,
+        port: 443,
+        path: '/blocks',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+}
+function findNewChains(peerNodes) {
+    // # Get the blockchains of every
+    // # other node
+    return Promise.all(peerNodes.map(
+        bcrest.getJSONPromise(peerOptionsProvider)
+    ));
+}
+
+function consensus(blockchain, peerNodes) {
+    // # Get the blocks from other nodes
+    return findNewChains(peerNodes).then(otherChains => {
+        // # If our chain isn't longest,
+        // # then we store the longest chain
+        let longestChain = blockchain;
+
+        // for chain in other_chains:
+        otherChains.forEach(chain => {
+            if (longestChain.length < chain.length) {
+                longestChain = chain;
+            }
+        });
+
+        // # If the longest chain isn't ours,
+        // # then we stop mining and set
+        // # our chain to the longest one
+        blockchain = longestChain;
+
+        return blockchain;
+    });
+}
+
 /*
 // Transaction:
 {
@@ -94,9 +139,11 @@ function mine(thisNodesTransactions, blockchain, minerAddress) {
 
     let newBlockData = {
         "proof-of-work": proof,
-        "transactions": thisNodesTransactions,
+        //@NOTE: Make array copy,
+        // cause original thisNodesTransactions will be emptied later
+        "transactions": thisNodesTransactions.map(item => item),
     };
-    let newBlockIndex = lastBlock.index + 1
+    let newBlockIndex = lastBlock.index + 1;
     let thisTimestamp = getDateNow();
     let newBlockTimestamp = thisTimestamp;
     let lastBlockHash = lastBlock.hash;
@@ -111,7 +158,7 @@ function mine(thisNodesTransactions, blockchain, minerAddress) {
         newBlockIndex,
         newBlockTimestamp,
         newBlockData,
-        lastBlockHash
+        lastBlockHash,
     );
 
     blockchain.append(minedBlock);
@@ -121,7 +168,7 @@ function mine(thisNodesTransactions, blockchain, minerAddress) {
         "index": newBlockIndex,
         "timestamp": newBlockTimestamp,
         "data": newBlockData,
-        "hash": lastBlockHash
+        "hash": lastBlockHash,
     }
 
 }
